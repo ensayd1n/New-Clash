@@ -16,6 +16,7 @@ public class CastleHealthController : MonoBehaviour
     public GameObject[] Guardians;
     [SerializeField] private GameObject[] supportCastles;
     private AudioSource _destroyedAudioSource;
+    [SerializeField] private GameObject placementBlock;
     
 
     private void Awake()
@@ -65,6 +66,11 @@ public class CastleHealthController : MonoBehaviour
             for (int i = 0; i < Guardians.Length; i++)
             {
                 Guardians[i].SetActive(false);
+            }
+
+            if (placementBlock != null)
+            {
+                placementBlock.SetActive(false);
             }
             _destroyedAudioSource.Play();
             gameObject.transform.DOMoveY(gameObject.transform.position.y - 50, 0.01F);

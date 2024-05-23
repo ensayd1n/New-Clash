@@ -9,6 +9,7 @@ public class CharacterPlacementSystem : MonoBehaviour
     [SerializeField] private PlayerDataManager playerDataManager;
     [SerializeField] private CharacterType[] characterTypes;
     public List<GameObject> instaniateCharacters;
+    [SerializeField] private GameObject[] placementLimitViewBlocks;
 
     private void Start()
     {
@@ -115,6 +116,10 @@ public class CharacterPlacementSystem : MonoBehaviour
         CellIndicator.SetActive(true);
         InputManager.OnClicked += PlaceStrucature;
         InputManager.OnExit += StopPlacement;
+        for (int i = 0; i < placementLimitViewBlocks.Length; i++)
+        {
+            placementLimitViewBlocks[i].SetActive(true);
+        }
     }
 
     private void PlaceStrucature()
@@ -143,6 +148,10 @@ public class CharacterPlacementSystem : MonoBehaviour
         _selectedSlot = null;
         InputManager.OnClicked -= PlaceStrucature;
         InputManager.OnExit -= StopPlacement;
+        for (int i = 0; i < placementLimitViewBlocks.Length; i++)
+        {
+            placementLimitViewBlocks[i].SetActive(false);
+        }
     }
 
     private IEnumerator SetActiveRetryButton(float time,GameObject obj)
