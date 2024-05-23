@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a3dbef020da534c899056d3b5c00a3, type: 3}
+  m_Name: "Okcu K\u0131z"
+  m_EditorClassIdentifier: 
+  Name: "Ok\xE7u K\u0131z"
+  Desciption: "Oklar\u0131mdan kimse kurtulamaz."
+  MaxHealth: 90
+  GivenDamage: 70
+  DamageDuration: 0
+  Cost: 4
+  MoveSpeed: 3
+  TargetDisctance: 12
+  CharacterImage: {fileID: 21300000, guid: bb86071264c34e24ca8b249b8e0d61ad, type: 3}
+  ThisGameObject: {fileID: 8267617180992055185, guid: 9e2936e8264e41c4298d45bc967c7f06, type: 3}
+  ThisHologramParentGameObject: {fileID: 7821673382334399696, guid: 2f9c46177e45e3740bee571d94dbe060, type: 3}

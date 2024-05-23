@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a3dbef020da534c899056d3b5c00a3, type: 3}
+  m_Name: Mutant
+  m_EditorClassIdentifier: 
+  Name: Mutant
+  Desciption: "Ben Y\u0131k\u0131lmaz\u0131m!"
+  MaxHealth: 1000
+  GivenDamage: 20
+  DamageDuration: 2
+  Cost: 7
+  MoveSpeed: 2
+  TargetDisctance: 5
+  CharacterImage: {fileID: 21300000, guid: 84a14b382857a394ba1f67c963a48377, type: 3}
+  ThisGameObject: {fileID: 2610710211965062249, guid: c49025d381ded244c9836c1791d5188f, type: 3}
+  ThisHologramParentGameObject: {fileID: 5713381470510984164, guid: 58c2f20857d567649bfeeddcc575b748, type: 3}

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a3dbef020da534c899056d3b5c00a3, type: 3}
+  m_Name: Skeleton
+  m_EditorClassIdentifier: 
+  Name: Skeleton
+  Desciption: Bir elin nesi var , iki elin sesi var
+  MaxHealth: 10
+  GivenDamage: 100
+  DamageDuration: 0
+  Cost: 1
+  MoveSpeed: 4
+  TargetDisctance: 15
+  CharacterImage: {fileID: 21300000, guid: 04dbef985de2ebf4cabe2c39b09ae899, type: 3}
+  ThisGameObject: {fileID: 5519260334753953022, guid: e7518827f95cb1546919fad8096a3624, type: 3}
+  ThisHologramParentGameObject: {fileID: 7486367423801652368, guid: 85b4a98db80951e48a9e5196a24249e8, type: 3}

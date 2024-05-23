@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a3dbef020da534c899056d3b5c00a3, type: 3}
+  m_Name: Barbar
+  m_EditorClassIdentifier: 
+  Name: Barbar
+  Desciption: "K\u0131l\u0131c\u0131m keskin. Herkesi alt edebilirim!"
+  MaxHealth: 250
+  GivenDamage: 125
+  DamageDuration: 2
+  Cost: 3
+  MoveSpeed: 3
+  TargetDisctance: 10
+  CharacterImage: {fileID: 21300000, guid: 37c4a664f1ba0a94fae7dc56c0f97a49, type: 3}
+  ThisGameObject: {fileID: 1191204949120170544, guid: e3792ae2a37b1ca42bee55d68dbcb1d5, type: 3}
+  ThisHologramParentGameObject: {fileID: 4117307402676052825, guid: 7cc8b27d602f0ff478fe72219891bffa, type: 3}
