@@ -9,28 +9,21 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     [SerializeField] private PlayerDataManager playerDataManager;
     [SerializeField] private List<GameObject> Characters;
 
-    [SerializeField] private int minXValue, maxXValue,maxZValue;
+    private int minXValue=-13, maxXValue=13,minZValue=12,maxZValue=35;
     
     public List<GameObject> InstantiatedBots;
     
     private List<GameObject> leftSideClosestCharacters,leftSideFarCharacters;
     private List<GameObject> rightSideClosestCharacters, rightSideFarCharacters;
     
-    private bool alertLeftSideClosest, alertLeftSideFar;
-    private bool alertRightSideClosest, alertRightSideFar;
+    private bool alertLeftSideClosest=false, alertLeftSideFar=false;
+    private bool alertRightSideClosest=false, alertRightSideFar=false;
 
     private float currentPotionAmount=0;
-
-    private GameObject currentCharacter;
-    private Vector3 currentTransform;
-
-    private void Awake()
-    {
-        SetBattleArray();
-    }
-
+    
     private void Start()
     {
+        SetBattleArray();
         FirstInstatiate();
         StartCoroutine(SyteamByTime(3));
     }
@@ -43,46 +36,42 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
 
     #region ArtificialIntelligence
 
-    private List<GameObject> battleArray = new List<GameObject>(4);
+    public List<GameObject> battleArray;
+    private GameObject selectedInstantiateCharacter=null;
 
     private void SetBattleArray()
     {
         for (int i = 0; i <playerDataManager.player.PlayerData.MainCharacterArray.Length; i++)
         {
-            int randomIndex = Random.Range(0, Characters.Count);
-            for (int j = 0; j < battleArray.Count; j++)
-            {
-                if (Characters[randomIndex] == battleArray[i])
-                {
-                    j--;
-                }
-                else
-                {
-                    battleArray.Add(Characters[randomIndex]);
-                }
-            }
-            
+            battleArray.Add(Characters[i]);
         }
     }
 
     private void Sytem()
     {
+        //Her hangi bir tehdit yok ise bu kısım çalıştırılacak
         if (alertLeftSideClosest != true && alertLeftSideFar != true && alertRightSideClosest != true &&
-            alertRightSideFar != true )
+            alertRightSideFar != true && selectedInstantiateCharacter==null)
         {
+            Debug.Log(selectedInstantiateCharacter);
             int randomCharacterValue = Random.Range(0, battleArray.Count);
             int randomXValue = Random.Range(minXValue, maxXValue);
             int randomZValue = Random.Range(10,maxZValue);
-            currentCharacter = battleArray[randomCharacterValue];
+            selectedInstantiateCharacter = battleArray[randomCharacterValue];
             BotInstantiateControl(battleArray[randomCharacterValue], new Vector3(randomXValue,0,randomZValue));
         }
-        else 
+        else
         {
-            if (alertLeftSideClosest && currentCharacter == null)
+            Debug.Log("tehdit aldı");
+            //tehdit var ise hangi tarafta olduğuna göre çalıştırılacak method lar
+            if (alertLeftSideClosest)
             {
+                //sol yakın kısımda bir tehdit var ve burası çalışacak
                 int randomTactics = Random.Range(0, 2);
+                //karakterin hangi konumlarda oluşturulacağı belirleniyor
                 int randomXValue = Convert.ToInt16(Random.Range(0, maxXValue));
-                int randomZValue = Convert.ToInt16(Random.Range(maxZValue, 0));
+                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
+                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
                 switch (randomTactics)
                 {
                     case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetLeftSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
@@ -95,9 +84,12 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             }
             else if (alertLeftSideFar)
             {
+                //sol uzak tarafta bir tehdit var ise burası tetiklenicek
                 int randomTactics = Random.Range(0, 2);
+                //karakterin hangi konumlarda oluşturulacağı belirleniyor
                 int randomXValue = Convert.ToInt16(Random.Range(0, maxXValue));
-                int randomZValue = Convert.ToInt16(Random.Range(maxZValue, 0));
+                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
+                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
                 switch (randomTactics)
                 {
                     case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetLeftSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
@@ -110,9 +102,12 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             }
             else if (alertRightSideClosest)
             {
+                //sağ yakın tarafta bir tehdir var ise burası tetiklenicek
                 int randomTactics = Random.Range(0, 2);
+                //karakterin hangi konumlarda oluşturulacağı belirleniyor
                 int randomXValue = Convert.ToInt16(Random.Range(minXValue, 0));
-                int randomZValue = Convert.ToInt16(Random.Range(maxZValue, 0));
+                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
+                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
                 switch (randomTactics)
                 {
                     case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetRightSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
@@ -125,9 +120,12 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             }
             else if (alertRightSideFar)
             {
+                //sağ uzak tarafta bir tehdir var ise burası tetiklenicek
                 int randomTactics = Random.Range(0, 2);
+                //karakterin hangi konumlarda oluşturulacağı belirleniyor
                 int randomXValue = Convert.ToInt16(Random.Range(minXValue, 0));
-                int randomZValue = Convert.ToInt16(Random.Range(maxZValue, 0));
+                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
+                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
                 switch (randomTactics)
                 {
                     case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetRightSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
@@ -139,6 +137,26 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
                 }
             }
         }
+    }
+    private void BotInstantiateControl(GameObject obj, Vector3 transform)
+    {
+        for (int i = 0; i < InstantiatedBots.Count; i++)
+        {
+            if (InstantiatedBots[i] == obj)
+            {
+                obj.transform.position = transform;
+                obj.SetActive(true);
+                ReduceCurrentPotionAmount(obj.GetComponent<CharacterManager>().CharacterType.Cost);
+                selectedInstantiateCharacter = null;
+                break;
+            }
+            if (i + 1 == InstantiatedBots.Count)
+            {
+                Instantiate(obj, transform, Quaternion.identity);
+                ReduceCurrentPotionAmount(obj.GetComponent<CharacterManager>().CharacterType.Cost);
+                selectedInstantiateCharacter = null;
+            }
+        } 
     }
     
     private IEnumerator SyteamByTime(float time)
@@ -302,7 +320,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
 
     #endregion
     
-    #region Sytems
+    #region OtherGameMethod
 
     private void FirstInstatiate()
     {
@@ -312,17 +330,8 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             {
                 GameObject obj = Instantiate(battleArray[i]);
                 InstantiatedBots.Add(obj);
+                obj.SetActive(false);
             }
-        }
-    }
-    private void BotInstantiateControl(GameObject obj, Vector3 transform)
-    {
-        if (obj.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotionAmount && currentCharacter!=null)
-        {
-            GameObject obj2 = Instantiate(obj, transform, Quaternion.identity);
-            obj2.transform.rotation = Quaternion.Euler(0, 180, 0);
-            ReduceCurrentPotionAmount(obj.GetComponent<CharacterManager>().CharacterType.Cost);
-            currentCharacter = null;
         }
     }
     private void SetAllerts()
