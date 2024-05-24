@@ -49,6 +49,34 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
 
     private void Sytem()
     {
+        if (alertLeftSideClosest == true)
+        {
+            
+        }
+
+        else if (alertLeftSideFar == true)
+        {
+            
+        }
+        
+        else if (alertRightSideClosest == true)
+        {
+            
+        }
+        else if (alertRightSideFar == true)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    }
+    
+    
+
+    private void Sytem2()
+    {
         //Her hangi bir tehdit yok ise bu kısım çalıştırılacak
         if (alertLeftSideClosest != true && alertLeftSideFar != true && alertRightSideClosest != true &&
             alertRightSideFar != true && selectedInstantiateCharacter==null)
@@ -62,7 +90,6 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
         }
         else
         {
-            Debug.Log("tehdit aldı");
             //tehdit var ise hangi tarafta olduğuna göre çalıştırılacak method lar
             if (alertLeftSideClosest)
             {
@@ -142,11 +169,13 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     {
         for (int i = 0; i < InstantiatedBots.Count; i++)
         {
-            if (InstantiatedBots[i] == obj)
+            CharacterType obj1Type = obj.GetComponent<CharacterManager>().CharacterType;
+            CharacterType obj2Type = InstantiatedBots[i].GetComponent<CharacterManager>().CharacterType;
+            if (obj1Type == obj2Type && InstantiatedBots[i].activeSelf==false)
             {
-                obj.transform.position = transform;
-                obj.SetActive(true);
-                ReduceCurrentPotionAmount(obj.GetComponent<CharacterManager>().CharacterType.Cost);
+                InstantiatedBots[i].transform.position = transform;
+                InstantiatedBots[i].SetActive(true);
+                ReduceCurrentPotionAmount(InstantiatedBots[i].GetComponent<CharacterManager>().CharacterType.Cost);
                 selectedInstantiateCharacter = null;
                 break;
             }
@@ -162,7 +191,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     private IEnumerator SyteamByTime(float time)
     {
         yield return new WaitForSeconds(time);
-        Sytem();
+        Sytem2();
         StartCoroutine(SyteamByTime(time));
     }
 
@@ -360,6 +389,11 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             alertRightSideClosest = false;
             alertRightSideFar = false;
         }
+    }
+
+    private GameObject SetSelectingInstantiateCharacter()
+    {
+        
     }
     #endregion
     
