@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class ArtificialIntelligenceSytem : MonoBehaviour
 {
@@ -25,19 +26,19 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     {
         SetBattleArray();
         FirstInstatiate();
-        StartCoroutine(SyteamByTime(3));
     }
 
     private void FixedUpdate()
     {
         AutoIncreaseCurrentPotionAmount();
-        SetAllerts();
+        SetAllerts(); 
+        Sytem2();
     }
 
     #region ArtificialIntelligence
 
     public List<GameObject> battleArray;
-    private GameObject selectedInstantiateCharacter=null;
+    private float MinimumPotionToSpawn = 3f;
 
     private void SetBattleArray()
     {
@@ -47,124 +48,139 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
         }
     }
 
-    private void Sytem()
-    {
-        if (alertLeftSideClosest == true)
-        {
-            
-        }
-
-        else if (alertLeftSideFar == true)
-        {
-            
-        }
-        
-        else if (alertRightSideClosest == true)
-        {
-            
-        }
-        else if (alertRightSideFar == true)
-        {
-            
-        }
-        else
-        {
-            
-        }
-    }
-    
-    
-
     private void Sytem2()
     {
-        //Her hangi bir tehdit yok ise bu kısım çalıştırılacak
-        if (alertLeftSideClosest != true && alertLeftSideFar != true && alertRightSideClosest != true &&
-            alertRightSideFar != true && selectedInstantiateCharacter==null)
+        if (currentPotionAmount < MinimumPotionToSpawn) return; // Yetersiz iksir varsa doğurma
+        if (InstantiatedBots.All(bot => bot.activeSelf)) return; // Tüm botlar aktif
+
+        // Tehdit Değerlendirmesi (Basitleştirilmiş)
+        bool isLeftThreatened = (alertLeftSideClosest || alertLeftSideFar);
+        bool isRightThreatened = (alertRightSideClosest || alertRightSideFar);
+
+        List<GameObject> targetCharacters = isLeftThreatened ? leftSideClosestCharacters : rightSideClosestCharacters;
+        if (targetCharacters.Count > 0)
         {
-            Debug.Log(selectedInstantiateCharacter);
-            int randomCharacterValue = Random.Range(0, battleArray.Count);
-            int randomXValue = Random.Range(minXValue, maxXValue);
-            int randomZValue = Random.Range(10,maxZValue);
-            selectedInstantiateCharacter = battleArray[randomCharacterValue];
-            BotInstantiateControl(battleArray[randomCharacterValue], new Vector3(randomXValue,0,randomZValue));
+            // targetCharacters zaten dolu, bir şey yapmaya gerek yok
+        }
+        else if (isRightThreatened)
+        {
+            targetCharacters = rightSideFarCharacters;
         }
         else
         {
-            //tehdit var ise hangi tarafta olduğuna göre çalıştırılacak method lar
-            if (alertLeftSideClosest)
+            targetCharacters = leftSideFarCharacters;
+        }
+
+        if (targetCharacters.Count == 0) // Acil tehdit yok
+        {
+            // Mevcut iksire göre en uygun karakteri seç
+            GameObject characterToSpawn = ChooseCharacterBasedOnPotion(currentPotionAmount);
+            Vector3 randomSpawnPoint = GetRandomSpawnPointInPlayerHalf();
+            BotInstantiateControl(characterToSpawn, randomSpawnPoint);
+        }
+        else // Tehdit algılandı
+        {
+            // Mevcut iksire göre karşı karakteri seç
+            GameObject counterCharacter = ChooseCounterCharacter(targetCharacters, currentPotionAmount);
+            Vector3 spawnPoint = GetNearestSpawnPointToThreat(targetCharacters);
+            BotInstantiateControl(counterCharacter, spawnPoint);
+        }
+    }
+    
+    private GameObject ChooseCharacterBasedOnPotion(float currentPotion)
+    {
+        // İksire göre uygun karakterleri filtrele
+        List<GameObject> affordableCharacters = battleArray.Where(charObj => 
+            charObj.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotion
+        ).ToList();
+
+        // Uygun karakterler arasından rastgele birini seç
+        if (affordableCharacters.Count > 0)
+        {
+            int randomIndex = Random.Range(0, affordableCharacters.Count);
+            return affordableCharacters[randomIndex];
+        }
+        else
+        {
+            // Uygun karakter yoksa en düşük maliyetli karakteri seç
+            return battleArray.OrderBy(charObj => 
+                charObj.GetComponent<CharacterManager>().CharacterType.Cost
+            ).First();
+        }
+    }
+
+    private Vector3 GetRandomSpawnPointInPlayerHalf()
+    {
+        int randomX = Random.Range(minXValue, 0); // Oyuncunun yarısı (sol taraf)
+        int randomZ = Random.Range(minZValue, maxZValue);
+        return new Vector3(randomX, 0, randomZ);
+    }
+
+    // Düşman karakterlerine en yakın doğma noktasını seçer
+    private Vector3 GetNearestSpawnPointToThreat(List<GameObject> threats)
+    {
+        GameObject closestThreat = threats.OrderBy(t => Vector3.Distance(t.transform.position, transform.position)).First();
+        
+        // Tehdide yakın bir nokta belirleyin (örneğin, tehdidin biraz arkasında)
+        Vector3 spawnOffset = (closestThreat.transform.position - transform.position).normalized * 2f; 
+        return closestThreat.transform.position + spawnOffset;
+    }
+
+    // Düşman karakterlerine karşı koyacak en uygun karakteri seçer
+    private GameObject ChooseCounterCharacter(List<GameObject> enemyCharacters, float currentPotion)
+    {
+        GameObject bestCounter = null;
+        float bestScore = -1f;
+
+        foreach (GameObject enemy in enemyCharacters)
+        {
+            CharacterType enemyType = enemy.GetComponent<CharacterManager>().CharacterType;
+
+            // Düşman karaktere karşı koyabilecek uygun karakterleri filtrele
+            List<GameObject> potentialCounters = battleArray.Where(charObj =>
+                    charObj.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotion &&
+                    charObj.GetComponent<CharacterManager>().CharacterType.CounterTo.Contains(enemyType) // CounterTo kullanımı
+            ).ToList();
+
+            if (potentialCounters.Count > 0)
             {
-                //sol yakın kısımda bir tehdit var ve burası çalışacak
-                int randomTactics = Random.Range(0, 2);
-                //karakterin hangi konumlarda oluşturulacağı belirleniyor
-                int randomXValue = Convert.ToInt16(Random.Range(0, maxXValue));
-                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
-                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
-                switch (randomTactics)
+                // Uygun karşı karakterler arasından en yüksek puanlı olanı seç
+                foreach (GameObject counter in potentialCounters)
                 {
-                    case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetLeftSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    case 1: BotInstantiateControl(SetSuitableCharacterForAttackPower(SetLeftSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    default: BotInstantiateControl(SetSuitableCharacterForHealth(SetLeftSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                }
-            }
-            else if (alertLeftSideFar)
-            {
-                //sol uzak tarafta bir tehdit var ise burası tetiklenicek
-                int randomTactics = Random.Range(0, 2);
-                //karakterin hangi konumlarda oluşturulacağı belirleniyor
-                int randomXValue = Convert.ToInt16(Random.Range(0, maxXValue));
-                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
-                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
-                switch (randomTactics)
-                {
-                    case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetLeftSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    case 1: BotInstantiateControl(SetSuitableCharacterForAttackPower(SetLeftSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    default: BotInstantiateControl(SetSuitableCharacterForHealth(SetLeftSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                }
-            }
-            else if (alertRightSideClosest)
-            {
-                //sağ yakın tarafta bir tehdir var ise burası tetiklenicek
-                int randomTactics = Random.Range(0, 2);
-                //karakterin hangi konumlarda oluşturulacağı belirleniyor
-                int randomXValue = Convert.ToInt16(Random.Range(minXValue, 0));
-                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
-                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
-                switch (randomTactics)
-                {
-                    case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetRightSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    case 1: BotInstantiateControl(SetSuitableCharacterForAttackPower(SetRightSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    default: BotInstantiateControl(SetSuitableCharacterForHealth(SetRightSideClosestCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                }
-            }
-            else if (alertRightSideFar)
-            {
-                //sağ uzak tarafta bir tehdir var ise burası tetiklenicek
-                int randomTactics = Random.Range(0, 2);
-                //karakterin hangi konumlarda oluşturulacağı belirleniyor
-                int randomXValue = Convert.ToInt16(Random.Range(minXValue, 0));
-                int randomZValue = Convert.ToInt16(Random.Range(0, maxZValue));
-                // bir taktik seçimi yapılarak ona göre oluşturulma yapılıyor cana bağlı yada saldırı gücüne bağlı bir taktik seçimi
-                switch (randomTactics)
-                {
-                    case 0: BotInstantiateControl(SetSuitableCharacterForHealth(SetRightSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    case 1: BotInstantiateControl(SetSuitableCharacterForAttackPower(SetRightSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
-                    default: BotInstantiateControl(SetSuitableCharacterForHealth(SetRightSideFarCharactersArray()),new Vector3(randomXValue,0,randomZValue));
-                        break;
+                    CharacterType counterType = counter.GetComponent<CharacterManager>().CharacterType;
+                    float score = CalculateCounterScore(enemyType, counterType); // Puan hesaplama metodu
+
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+                        bestCounter = counter;
+                    }
                 }
             }
         }
+
+        return bestCounter ?? battleArray[0]; 
     }
+    
+    private float CalculateCounterScore(CharacterType enemyType, CharacterType counterType)
+    {
+        float score = 0f;
+
+        // Örnek puanlama mantığı:
+        if (enemyType.GivenDamage > enemyType.MaxHealth)
+        {
+            score += counterType.MaxHealth; // Yüksek hasara karşı yüksek sağlık
+        }
+        else
+        {
+            score += counterType.GivenDamage; // Yüksek sağlığa karşı yüksek hasar
+        }
+
+        // Diğer faktörleri (menzil, hız, vb.) de hesaba katabilirsiniz
+
+        return score;
+    }
+
     private void BotInstantiateControl(GameObject obj, Vector3 transform)
     {
         for (int i = 0; i < InstantiatedBots.Count; i++)
@@ -176,14 +192,12 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
                 InstantiatedBots[i].transform.position = transform;
                 InstantiatedBots[i].SetActive(true);
                 ReduceCurrentPotionAmount(InstantiatedBots[i].GetComponent<CharacterManager>().CharacterType.Cost);
-                selectedInstantiateCharacter = null;
                 break;
             }
             if (i + 1 == InstantiatedBots.Count)
             {
                 Instantiate(obj, transform, Quaternion.identity);
                 ReduceCurrentPotionAmount(obj.GetComponent<CharacterManager>().CharacterType.Cost);
-                selectedInstantiateCharacter = null;
             }
         } 
     }
@@ -391,10 +405,6 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
         }
     }
 
-    private GameObject SetSelectingInstantiateCharacter()
-    {
-        
-    }
     #endregion
     
     #region Potion

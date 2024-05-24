@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Character Type",menuName = "Character Type")]
@@ -14,4 +15,5 @@ public class CharacterType : ScriptableObject
     public Sprite CharacterImage;
     public GameObject ThisGameObject;
     public GameObject ThisHologramParentGameObject;
+    public List<CharacterType> CounterTo = new List<CharacterType>();
 }
