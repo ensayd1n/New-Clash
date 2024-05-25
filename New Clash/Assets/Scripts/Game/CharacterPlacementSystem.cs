@@ -63,6 +63,7 @@ public class CharacterPlacementSystem : MonoBehaviour
             GameObject obj = FindCharacter(inputType);
             obj.transform.position = new Vector3(transform.position.x,0,transform.position.z);
             obj.SetActive(true);
+            obj.GetComponent<CharacterMovementController>().MoveLock = false;
             return obj;
         }
         else
@@ -79,7 +80,7 @@ public class CharacterPlacementSystem : MonoBehaviour
 
     private void SetCardCharacterTypes()
     {
-        for (int i = playerDataManager.player.PlayerData.MainCharacterArray.Length; i < 0; i--)
+        for (int i = 0; i < playerDataManager.player.PlayerData.MainCharacterArray.Length; i++)
         {
             CardSlots[i].GetComponent<CharacterCardManager>().CharacterType =
                 playerDataManager.player.PlayerData.MainCharacterArray[i];

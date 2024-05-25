@@ -12,7 +12,7 @@ public class CharacterHealthController : MonoBehaviour
     [HideInInspector] public float CurrentHealth;
     private float _maxHealth;
 
-    public GameObject _canvas;
+    [SerializeField] private GameObject _canvas;
     private Slider _healthSlider;
 
     private AudioSource _audioSource;
@@ -35,12 +35,6 @@ public class CharacterHealthController : MonoBehaviour
     {
         SetHealth();
     }
-
-    private void FixedUpdate()
-    {
-        //SetActiveCanvas();
-    }
-
     public void SetHealth()
     {
         _maxHealth = _characterType.MaxHealth;

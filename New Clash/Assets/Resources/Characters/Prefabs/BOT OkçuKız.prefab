@@ -666,7 +666,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentHealth: 0
-  _canvas: {fileID: 0}
+  _canvas: {fileID: 2124894794823625467}
 --- !u!65 &7027797638101535857
 BoxCollider:
   m_ObjectHideFlags: 0

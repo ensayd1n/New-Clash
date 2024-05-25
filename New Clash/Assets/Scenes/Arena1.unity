@@ -1973,6 +1973,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 463291045}
+  - component: {fileID: 463291046}
   m_Layer: 0
   m_Name: ArtificialIntelligenceSytem
   m_TagString: Untagged
@@ -1995,6 +1996,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &463291046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463291043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f2ab7ec1eb7dd4ca2fb9b30a5e8988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerDataManager: {fileID: 1630443709}
+  Characters:
+  - {fileID: 1191204949120170544, guid: e17cbf7ce0e86b24ca5e05387d4b90fc, type: 3}
+  - {fileID: 2610710211965062249, guid: 51970972dcd9f6740acfbdca51fabcea, type: 3}
+  - {fileID: 8267617180992055185, guid: 747c6002c8efa8d4caf8527fcc953359, type: 3}
+  - {fileID: 1566564657337955258, guid: e3a7fd7d4099dd9409e8b1dab2cdddc0, type: 3}
+  InstantiatedBots: []
 --- !u!1 &515683083
 GameObject:
   m_ObjectHideFlags: 0

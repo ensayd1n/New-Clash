@@ -20,24 +20,37 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     private bool alertLeftSideClosest=false, alertLeftSideFar=false;
     private bool alertRightSideClosest=false, alertRightSideFar=false;
 
-    private float currentPotionAmount=0;
+    private float currentPotionAmount=3;
+    private List<GameObject> battleArray;
     
     private void Start()
     {
         SetBattleArray();
         FirstInstatiate();
+
+        // Listeleri başlat
+        leftSideClosestCharacters = new List<GameObject>();
+        leftSideFarCharacters = new List<GameObject>();
+        rightSideClosestCharacters = new List<GameObject>();
+        rightSideFarCharacters = new List<GameObject>();
+
+        // İlk uyarıları ayarla
+        SetAllerts();
     }
 
     private void FixedUpdate()
     {
         AutoIncreaseCurrentPotionAmount();
         SetAllerts(); 
-        Sytem2();
+
+        // Prioritize spawning if there are inactive bots or enough potion
+        if (currentPotionAmount >= MinimumPotionToSpawn && !InstantiatedBots.All(bot => bot.activeSelf))
+        {
+            System(); 
+        }
     }
 
     #region ArtificialIntelligence
-
-    public List<GameObject> battleArray;
     private float MinimumPotionToSpawn = 3f;
 
     private void SetBattleArray()
@@ -48,44 +61,70 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
         }
     }
 
-    private void Sytem2()
+   private void System()
+{
+    // Updated Threat Assessment
+    bool isLeftThreatened = alertLeftSideClosest || alertLeftSideFar;
+    bool isRightThreatened = alertRightSideClosest || alertRightSideFar;
+
+    bool spawnOnLeft = false; // Default to spawn on the right
+    List<GameObject> targetCharacters = new List<GameObject>();
+
+    if (isLeftThreatened && isRightThreatened)
     {
-        if (currentPotionAmount < MinimumPotionToSpawn) return; // Yetersiz iksir varsa doğurma
-        if (InstantiatedBots.All(bot => bot.activeSelf)) return; // Tüm botlar aktif
+        // Compare total threat levels on both sides (health or attack power)
+        float leftThreatLevel = TotalHealthInArray(leftSideClosestCharacters) + TotalHealthInArray(leftSideFarCharacters);
+        float rightThreatLevel = TotalHealthInArray(rightSideClosestCharacters) + TotalHealthInArray(rightSideFarCharacters);
 
-        // Tehdit Değerlendirmesi (Basitleştirilmiş)
-        bool isLeftThreatened = (alertLeftSideClosest || alertLeftSideFar);
-        bool isRightThreatened = (alertRightSideClosest || alertRightSideFar);
-
-        List<GameObject> targetCharacters = isLeftThreatened ? leftSideClosestCharacters : rightSideClosestCharacters;
-        if (targetCharacters.Count > 0)
+        if (leftThreatLevel > rightThreatLevel)
         {
-            // targetCharacters zaten dolu, bir şey yapmaya gerek yok
-        }
-        else if (isRightThreatened)
-        {
-            targetCharacters = rightSideFarCharacters;
-        }
-        else
-        {
-            targetCharacters = leftSideFarCharacters;
-        }
-
-        if (targetCharacters.Count == 0) // Acil tehdit yok
-        {
-            // Mevcut iksire göre en uygun karakteri seç
-            GameObject characterToSpawn = ChooseCharacterBasedOnPotion(currentPotionAmount);
-            Vector3 randomSpawnPoint = GetRandomSpawnPointInPlayerHalf();
-            BotInstantiateControl(characterToSpawn, randomSpawnPoint);
-        }
-        else // Tehdit algılandı
-        {
-            // Mevcut iksire göre karşı karakteri seç
-            GameObject counterCharacter = ChooseCounterCharacter(targetCharacters, currentPotionAmount);
-            Vector3 spawnPoint = GetNearestSpawnPointToThreat(targetCharacters);
-            BotInstantiateControl(counterCharacter, spawnPoint);
-        }
+            spawnOnLeft = true;
+        } // Otherwise, the default (spawnOnLeft = false) handles the right side
     }
+    else if (isLeftThreatened)
+    {
+        spawnOnLeft = true;
+    }
+
+    // Select target characters based on the chosen side
+    if (spawnOnLeft)
+    {
+        targetCharacters = alertLeftSideClosest ? leftSideClosestCharacters : leftSideFarCharacters;
+    }
+    else
+    {
+        targetCharacters = alertRightSideClosest ? rightSideClosestCharacters : rightSideFarCharacters;
+    }
+
+    GameObject characterToSpawn;
+    Vector3 spawnPoint;
+
+    if (targetCharacters.Count == 0) // No immediate threat
+    {
+        // No threat, spawn a random suitable character
+        characterToSpawn = ChooseCharacterBasedOnPotion(currentPotionAmount);
+        // Choose the appropriate spawn point based on the chosen side
+        spawnPoint = spawnOnLeft ? GetRandomSpawnPointInLeftHalf() : GetRandomSpawnPointInRightHalf();
+    }
+    else // Threat detected
+    {
+        // Counter the threat
+        characterToSpawn = ChooseCounterCharacter(targetCharacters, currentPotionAmount);
+        spawnPoint = GetNearestSpawnPointToThreat(targetCharacters);
+    }
+
+    // Check if enough potion before spawning
+    if (characterToSpawn.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotionAmount)
+    {
+        BotInstantiateControl(characterToSpawn, spawnPoint);
+    }
+}
+private Vector3 GetRandomSpawnPointInRightHalf()
+{
+    int randomX = Random.Range(0, maxXValue + 1); // Right half of the board
+    int randomZ = Random.Range(minZValue, maxZValue);
+    return new Vector3(randomX, 0, randomZ);
+}
     
     private GameObject ChooseCharacterBasedOnPotion(float currentPotion)
     {
@@ -108,11 +147,10 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             ).First();
         }
     }
-
-    private Vector3 GetRandomSpawnPointInPlayerHalf()
+    private Vector3 GetRandomSpawnPointInLeftHalf()
     {
-        int randomX = Random.Range(minXValue, 0); // Oyuncunun yarısı (sol taraf)
-        int randomZ = Random.Range(minZValue, maxZValue);
+        int randomX = Random.Range(minXValue, 0); // Sol yarının X koordinatları (negatif değerler)
+        int randomZ = Random.Range(minZValue, maxZValue + 1); // Z koordinatları aynı kalır
         return new Vector3(randomX, 0, randomZ);
     }
 
@@ -191,6 +229,8 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             {
                 InstantiatedBots[i].transform.position = transform;
                 InstantiatedBots[i].SetActive(true);
+                InstantiatedBots[i].GetComponent<CharacterMovementController>().MoveLock = false;
+                InstantiatedBots[i].transform.GetChild(0).GetComponent<CharacterHealthController>().SetHealth();
                 ReduceCurrentPotionAmount(InstantiatedBots[i].GetComponent<CharacterManager>().CharacterType.Cost);
                 break;
             }
@@ -201,14 +241,6 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             }
         } 
     }
-    
-    private IEnumerator SyteamByTime(float time)
-    {
-        yield return new WaitForSeconds(time);
-        Sytem2();
-        StartCoroutine(SyteamByTime(time));
-    }
-
     #endregion
 
     #region Suitability
@@ -420,7 +452,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     private void AutoIncreaseCurrentPotionAmount()
     {
         currentPotionAmount = Mathf.Clamp(currentPotionAmount, 0, 10);
-        currentPotionAmount += Time.deltaTime;
+        currentPotionAmount += Time.deltaTime *0.5F;
     }
     #endregion
     

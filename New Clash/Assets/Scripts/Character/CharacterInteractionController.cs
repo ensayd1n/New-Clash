@@ -54,7 +54,7 @@ public class CharacterInteractionController : MonoBehaviour
             else if (_characterMovementController.ClosestTarget.tag == _characterManager.TargetCastleTag)
             {
                 if (distanceToTarget <= _characterManager.CharacterType.TargetDisctance 
-                    && _interactionToTargetLock!=true)
+                    && _interactionToTargetLock != true) // Kale hedefi için _interactionToTargetLock kontrolü eklendi
                 {
                     _attackController.InteractionTarget = _characterMovementController.ClosestTarget;
                     gameObject.GetComponentInParent<CharacterMovementController>().MoveLock = true;

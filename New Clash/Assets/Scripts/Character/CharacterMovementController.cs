@@ -17,6 +17,9 @@ public class CharacterMovementController : MonoBehaviour
 
     [SerializeField] private bool Character, Castle;
     
+    private float lastTargetSearchTime = 0;
+    private float targetSearchInterval = 1f;
+    
 
     private void Awake()
     {
@@ -35,15 +38,30 @@ public class CharacterMovementController : MonoBehaviour
 
     private void Update()
     {
-        SearchCLosestTarget();
-        PositionAndRotation();
+        if (Time.time - lastTargetSearchTime > targetSearchInterval || ClosestTarget == null)
+        {
+            SearchCLosestTarget();
+            lastTargetSearchTime = Time.time;
+        }
+
+        if (ClosestTarget != null) // Hedefin geçerliliğini kontrol et
+        {
+            PositionAndRotation();
+        }
     }
     private Transform PositionAndRotation()
     {
         if (MoveLock != true)
         {
             _agent.speed = characterType.MoveSpeed;
-            _agent.SetDestination(ClosestTarget.transform.position);  
+            if (Vector3.Distance(transform.position, ClosestTarget.transform.position) > _agent.stoppingDistance) // Hedefe ulaşılıp ulaşılmadığını kontrol et
+            {
+                _agent.SetDestination(ClosestTarget.transform.position);
+            }
+            else
+            {
+                // Hedefe ulaşıldığında yapılacak işlemler (örneğin saldırı, bekleme vb.)
+            }
         }
         else if (MoveLock != false)
         {
