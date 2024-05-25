@@ -10266,6 +10266,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Arena2 Map
       objectReference: {fileID: 0}
+    - target: {fileID: 1370723720152955781, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1370723720152955781, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Center.z
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1575506875235272693, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1575506875235272693, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Center.z
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 1674586705858626217, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -10273,6 +10289,10 @@ PrefabInstance:
     - target: {fileID: 1674586705858626217, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2647600148046893243, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Name
+      value: SupportCastleRight
       objectReference: {fileID: 0}
     - target: {fileID: 3962956883864299645, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10322,6 +10342,22 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5471392531442380254, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5471392531442380254, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Center.z
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6776004928385679393, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Size.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6776004928385679393, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Center.z
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 7172174245723490704, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -10353,6 +10389,10 @@ PrefabInstance:
     - target: {fileID: 8267113719241365235, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9160562481285559158, guid: 91c8e422870ecd848bb4f193d7652a63, type: 3}
+      propertyPath: m_Name
+      value: SupportCastleLeft
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

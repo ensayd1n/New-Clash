@@ -23,3 +23,5 @@ MonoBehaviour:
   CharacterImage: {fileID: 21300000, guid: 84a14b382857a394ba1f67c963a48377, type: 3}
   ThisGameObject: {fileID: 2610710211965062249, guid: c49025d381ded244c9836c1791d5188f, type: 3}
   ThisHologramParentGameObject: {fileID: 5713381470510984164, guid: 58c2f20857d567649bfeeddcc575b748, type: 3}
+  CounterTo:
+  - {fileID: 11400000, guid: 768c646ed6674cd42a66747ae8aecb32, type: 2}

@@ -21,10 +21,11 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     private bool alertRightSideClosest=false, alertRightSideFar=false;
 
     private float currentPotionAmount=3;
-    private List<GameObject> battleArray;
+    private List<GameObject> battleArray = new List<GameObject>();
     
     private void Start()
     {
+        battleArray = new List<GameObject>(); // Initialize the list
         SetBattleArray();
         FirstInstatiate();
 
@@ -55,77 +56,104 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
 
     private void SetBattleArray()
     {
-        for (int i = 0; i <playerDataManager.player.PlayerData.MainCharacterArray.Length; i++)
+        if (playerDataManager.player.PlayerData.MainCharacterArray.Length != Characters.Count)
+        {
+            return;
+        }
+
+        battleArray.Clear();
+
+        for (int i = 0; i < playerDataManager.player.PlayerData.MainCharacterArray.Length; i++)
         {
             battleArray.Add(Characters[i]);
         }
     }
 
-   private void System()
-{
-    // Updated Threat Assessment
-    bool isLeftThreatened = alertLeftSideClosest || alertLeftSideFar;
-    bool isRightThreatened = alertRightSideClosest || alertRightSideFar;
-
-    bool spawnOnLeft = false; // Default to spawn on the right
-    List<GameObject> targetCharacters = new List<GameObject>();
-
-    if (isLeftThreatened && isRightThreatened)
+    private void System()
     {
-        // Compare total threat levels on both sides (health or attack power)
-        float leftThreatLevel = TotalHealthInArray(leftSideClosestCharacters) + TotalHealthInArray(leftSideFarCharacters);
-        float rightThreatLevel = TotalHealthInArray(rightSideClosestCharacters) + TotalHealthInArray(rightSideFarCharacters);
+        if (playerDataManager == null || playerDataManager.player == null ||
+            playerDataManager.player.PlayerData == null)
+        {
+            return;
+        }
 
-        if (leftThreatLevel > rightThreatLevel)
+        if (InstantiatedBots == null)
+        {
+            return;
+        }
+
+        if (battleArray == null || battleArray.Count == 0)
+        {
+            return;
+        }
+        
+        bool isLeftThreatened = alertLeftSideClosest || alertLeftSideFar;
+        bool isRightThreatened = alertRightSideClosest || alertRightSideFar;
+
+        bool spawnOnLeft = false; // Default to spawn on the right
+        List<GameObject> targetCharacters = new List<GameObject>();
+
+        if (isLeftThreatened && isRightThreatened)
+        {
+            // Compare total threat levels on both sides (health or attack power)
+            float leftThreatLevel = TotalHealthInArray(leftSideClosestCharacters) +
+                                    TotalHealthInArray(leftSideFarCharacters);
+            float rightThreatLevel = TotalHealthInArray(rightSideClosestCharacters) +
+                                     TotalHealthInArray(rightSideFarCharacters);
+
+            if (leftThreatLevel > rightThreatLevel)
+            {
+                spawnOnLeft = true;
+            } // Otherwise, the default (spawnOnLeft = false) handles the right side
+        }
+        else if (isLeftThreatened)
         {
             spawnOnLeft = true;
-        } // Otherwise, the default (spawnOnLeft = false) handles the right side
-    }
-    else if (isLeftThreatened)
-    {
-        spawnOnLeft = true;
+        }
+
+        // Select target characters based on the chosen side
+        if (spawnOnLeft)
+        {
+            targetCharacters = alertLeftSideClosest ? leftSideClosestCharacters : leftSideFarCharacters;
+        }
+        else
+        {
+            targetCharacters = alertRightSideClosest ? rightSideClosestCharacters : rightSideFarCharacters;
+        }
+
+        GameObject characterToSpawn;
+        Vector3 spawnPoint;
+
+        if (targetCharacters.Count == 0) // No immediate threat
+        {
+            // No threat, spawn a random suitable character
+            characterToSpawn = ChooseCharacterBasedOnPotion(currentPotionAmount);
+            // Choose the appropriate spawn point based on the chosen side
+            spawnPoint = spawnOnLeft ? GetRandomSpawnPointInLeftHalf() : GetRandomSpawnPointInRightHalf();
+        }
+        else // Threat detected
+        {
+            // Counter the threat
+            characterToSpawn = ChooseCounterCharacter(targetCharacters, currentPotionAmount);
+            spawnPoint = GetNearestSpawnPointToThreat(targetCharacters);
+        }
+
+        // Check if enough potion before spawning
+        if (characterToSpawn != null && characterToSpawn.GetComponent<CharacterManager>() != null &&
+            characterToSpawn.GetComponent<CharacterManager>().CharacterType != null &&
+            characterToSpawn.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotionAmount)
+        {
+            BotInstantiateControl(characterToSpawn, spawnPoint);
+        }
     }
 
-    // Select target characters based on the chosen side
-    if (spawnOnLeft)
+    private Vector3 GetRandomSpawnPointInRightHalf()
     {
-        targetCharacters = alertLeftSideClosest ? leftSideClosestCharacters : leftSideFarCharacters;
-    }
-    else
-    {
-        targetCharacters = alertRightSideClosest ? rightSideClosestCharacters : rightSideFarCharacters;
+        int randomX = Random.Range(0, maxXValue + 1); // Right half of the board
+        int randomZ = Random.Range(minZValue, maxZValue);
+        return new Vector3(randomX, 0, randomZ);
     }
 
-    GameObject characterToSpawn;
-    Vector3 spawnPoint;
-
-    if (targetCharacters.Count == 0) // No immediate threat
-    {
-        // No threat, spawn a random suitable character
-        characterToSpawn = ChooseCharacterBasedOnPotion(currentPotionAmount);
-        // Choose the appropriate spawn point based on the chosen side
-        spawnPoint = spawnOnLeft ? GetRandomSpawnPointInLeftHalf() : GetRandomSpawnPointInRightHalf();
-    }
-    else // Threat detected
-    {
-        // Counter the threat
-        characterToSpawn = ChooseCounterCharacter(targetCharacters, currentPotionAmount);
-        spawnPoint = GetNearestSpawnPointToThreat(targetCharacters);
-    }
-
-    // Check if enough potion before spawning
-    if (characterToSpawn.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotionAmount)
-    {
-        BotInstantiateControl(characterToSpawn, spawnPoint);
-    }
-}
-private Vector3 GetRandomSpawnPointInRightHalf()
-{
-    int randomX = Random.Range(0, maxXValue + 1); // Right half of the board
-    int randomZ = Random.Range(minZValue, maxZValue);
-    return new Vector3(randomX, 0, randomZ);
-}
-    
     private GameObject ChooseCharacterBasedOnPotion(float currentPotion)
     {
         // İksire göre uygun karakterleri filtrele
