@@ -64,6 +64,7 @@ public class CharacterPlacementSystem : MonoBehaviour
             obj.transform.position = new Vector3(transform.position.x,0,transform.position.z);
             obj.SetActive(true);
             obj.GetComponent<CharacterMovementController>().MoveLock = false;
+            obj.transform.GetChild(0).GetComponent<CharacterHealthController>().SetHealth();
             return obj;
         }
         else

@@ -18,17 +18,20 @@ public class CharacterAttackController : MonoBehaviour
 
     public void GivenDamage()
     {
-        if (InteractionTarget.tag == _characterManager.TargetCharacterTag)
+        if (InteractionTarget != null)
         {
-            InteractionTarget.GetComponent<CharacterHealthController>()
-                .TakenDamage(_characterType.GivenDamage);
+            if (InteractionTarget.tag == _characterManager.TargetCharacterTag)
+            {
+                InteractionTarget.GetComponent<CharacterHealthController>()
+                    .TakenDamage(_characterType.GivenDamage);
+            }
+            else if (InteractionTarget.tag == _characterManager.TargetCastleTag)
+            {
+                InteractionTarget.GetComponent<CastleHealthController>()
+                    .TakenDamage(_characterType.GivenDamage);
+            }
+            _audioSource.Play();
         }
-        else if (InteractionTarget.tag == _characterManager.TargetCastleTag)
-        {
-            InteractionTarget.GetComponent<CastleHealthController>()
-                .TakenDamage(_characterType.GivenDamage);
-        }
-        _audioSource.Play();
     }
     
 }
