@@ -2015,6 +2015,7 @@ MonoBehaviour:
   - {fileID: 8267617180992055185, guid: 747c6002c8efa8d4caf8527fcc953359, type: 3}
   - {fileID: 1566564657337955258, guid: e3a7fd7d4099dd9409e8b1dab2cdddc0, type: 3}
   - {fileID: 4247325156817921456, guid: c9d03deed3baed1438adde3cedea4bd6, type: 3}
+  - {fileID: 1373250768418365247, guid: 64cfc7dd2dd47b343acca2521121c405, type: 3}
   InstantiatedBots: []
 --- !u!1 &515683083
 GameObject:
@@ -10481,6 +10482,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90d30afa42b2ff744b5885c486c38c38, type: 2}
   - {fileID: 11400000, guid: 87551ebe700444441a4a34d30be6b2fa, type: 2}
   - {fileID: 11400000, guid: cfe61e8766da3a74dba58b17db4e69ed, type: 2}
+  - {fileID: 11400000, guid: 8b6bfbe03607201498847a7e5d3ac56b, type: 2}
   instaniateCharacters: []
   placementLimitViewBlocks:
   - {fileID: 984312634}

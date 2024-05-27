@@ -81,10 +81,11 @@ public class CharacterPlacementSystem : MonoBehaviour
 
     private void SetCardCharacterTypes()
     {
-        for (int i = 0; i < playerDataManager.player.PlayerData.MainCharacterArray.Length; i++)
+        for (int i = 0; i < CardSlots.Length; i++)
         {
-            CardSlots[i].GetComponent<CharacterCardManager>().CharacterType =
+            CardSlots[i].gameObject.GetComponent<CharacterCardManager>().CharacterType =
                 playerDataManager.player.PlayerData.MainCharacterArray[i];
+            CardSlots[i].gameObject.GetComponent<CharacterCardManager>().SetCardCharactersProperties();
         }
     }
     #endregion

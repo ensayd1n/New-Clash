@@ -1363,6 +1363,8 @@ MonoBehaviour:
   - {fileID: 2610710211965062249, guid: 51970972dcd9f6740acfbdca51fabcea, type: 3}
   - {fileID: 8267617180992055185, guid: 747c6002c8efa8d4caf8527fcc953359, type: 3}
   - {fileID: 1566564657337955258, guid: e3a7fd7d4099dd9409e8b1dab2cdddc0, type: 3}
+  - {fileID: 4247325156817921456, guid: c9d03deed3baed1438adde3cedea4bd6, type: 3}
+  - {fileID: 1373250768418365247, guid: 64cfc7dd2dd47b343acca2521121c405, type: 3}
   InstantiatedBots: []
 --- !u!1 &515683083
 GameObject:
@@ -8224,7 +8226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896832b66779ae4429d76c5cee8f7d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterType: {fileID: 11400000, guid: 87551ebe700444441a4a34d30be6b2fa, type: 2}
+  CharacterType: {fileID: 11400000, guid: cfe61e8766da3a74dba58b17db4e69ed, type: 2}
   Name: {fileID: 6466429669767015446}
   CharacterImage: {fileID: 132354558101778079}
   HealthText: {fileID: 1026052560848661424}
@@ -8601,7 +8603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896832b66779ae4429d76c5cee8f7d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterType: {fileID: 11400000, guid: a9929fbb0d5a3894a8e38622d2234487, type: 2}
+  CharacterType: {fileID: 11400000, guid: cfe61e8766da3a74dba58b17db4e69ed, type: 2}
   Name: {fileID: 5210651043763638689}
   CharacterImage: {fileID: 6078858502216904444}
   HealthText: {fileID: 4506209571981019534}
@@ -10411,7 +10413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896832b66779ae4429d76c5cee8f7d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterType: {fileID: 11400000, guid: 768c646ed6674cd42a66747ae8aecb32, type: 2}
+  CharacterType: {fileID: 11400000, guid: cfe61e8766da3a74dba58b17db4e69ed, type: 2}
   Name: {fileID: 6624867508621502651}
   CharacterImage: {fileID: 1948222210698276004}
   HealthText: {fileID: 4085625167805213631}
@@ -10590,6 +10592,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a9929fbb0d5a3894a8e38622d2234487, type: 2}
   - {fileID: 11400000, guid: 90d30afa42b2ff744b5885c486c38c38, type: 2}
   - {fileID: 11400000, guid: 87551ebe700444441a4a34d30be6b2fa, type: 2}
+  - {fileID: 11400000, guid: cfe61e8766da3a74dba58b17db4e69ed, type: 2}
+  - {fileID: 11400000, guid: 8b6bfbe03607201498847a7e5d3ac56b, type: 2}
   instaniateCharacters: []
   placementLimitViewBlocks:
   - {fileID: 2145066567}
@@ -11926,7 +11930,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896832b66779ae4429d76c5cee8f7d7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterType: {fileID: 11400000, guid: 90d30afa42b2ff744b5885c486c38c38, type: 2}
+  CharacterType: {fileID: 11400000, guid: cfe61e8766da3a74dba58b17db4e69ed, type: 2}
   Name: {fileID: 2843748895358145805}
   CharacterImage: {fileID: 5596385881034340936}
   HealthText: {fileID: 7809945911796813884}

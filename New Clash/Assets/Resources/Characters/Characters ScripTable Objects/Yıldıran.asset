@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a3dbef020da534c899056d3b5c00a3, type: 3}
+  m_Name: "Y\u0131ld\u0131ran"
+  m_EditorClassIdentifier: 
+  Name: "Y\u0131ld\u0131ran"
+  Desciption: "Yeri g\xF6\u011F\xFC inletirim"
+  MaxHealth: 1000
+  GivenDamage: 250
+  DamageDuration: 1
+  Cost: 10
+  MoveSpeed: 3
+  TargetDisctance: 8
+  CharacterImage: {fileID: 0}
+  ThisGameObject: {fileID: 735846656584405582, guid: 58fff9eec26c72441956882b2eebec02, type: 3}
+  ThisHologramParentGameObject: {fileID: 8309851512538476062, guid: c572a63011a32b84eac3719d1e20acdd, type: 3}
+  CounterTo:
+  - {fileID: 11400000, guid: a9929fbb0d5a3894a8e38622d2234487, type: 2}
+  - {fileID: 11400000, guid: cfe61e8766da3a74dba58b17db4e69ed, type: 2}
+  - {fileID: 11400000, guid: 90d30afa42b2ff744b5885c486c38c38, type: 2}

@@ -11,9 +11,9 @@ public class CharacterCardManager : MonoBehaviour
    [SerializeField] private TextMeshProUGUI HealthText;
    [SerializeField] private TextMeshProUGUI AttackText;
    [SerializeField] private TextMeshProUGUI CostText;
+   
 
-
-   private void Start()
+   public void SetCardCharactersProperties()
    {
       Name.text = CharacterType.Name;
       CharacterImage.GetComponent<Image>().sprite = CharacterType.CharacterImage;

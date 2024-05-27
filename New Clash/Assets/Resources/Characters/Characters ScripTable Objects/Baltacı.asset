@@ -21,7 +21,7 @@ MonoBehaviour:
   MoveSpeed: 3.5
   TargetDisctance: 10
   CharacterImage: {fileID: 21300000, guid: a57f566de5cecbb41a0c28a944a0c76f, type: 3}
-  ThisGameObject: {fileID: 0}
+  ThisGameObject: {fileID: 9039222679483592876, guid: 2e52714484b18fe41a2b0c370c42fc54, type: 3}
   ThisHologramParentGameObject: {fileID: 3171361483510757351, guid: a5da1a37ebbe6734f973489298324668, type: 3}
   CounterTo:
   - {fileID: 11400000, guid: 90d30afa42b2ff744b5885c486c38c38, type: 2}

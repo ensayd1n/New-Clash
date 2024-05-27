@@ -56,17 +56,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
 
     private void SetBattleArray()
     {
-        if (playerDataManager.player.PlayerData.MainCharacterArray.Length != Characters.Count)
-        {
-            return;
-        }
-
-        battleArray.Clear();
-
-        for (int i = 0; i < playerDataManager.player.PlayerData.MainCharacterArray.Length; i++)
-        {
-            battleArray.Add(Characters[i]);
-        }
+        battleArray = Characters.OrderBy(x => Random.value).Take(4).Distinct().ToList();
     }
 
     private void System()
@@ -156,10 +146,9 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
 
     private GameObject ChooseCharacterBasedOnPotion(float currentPotion)
     {
-        // İksire göre uygun karakterleri filtrele
-        List<GameObject> affordableCharacters = battleArray.Where(charObj => 
-            charObj.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotion
-        ).ToList();
+        List<GameObject> affordableCharacters = battleArray
+            .Where(charObj => charObj.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotion)
+            .ToList();
 
         // Uygun karakterler arasından rastgele birini seç
         if (affordableCharacters.Count > 0)
@@ -249,6 +238,10 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
 
     private void BotInstantiateControl(GameObject obj, Vector3 transform)
     {
+        if (obj == null)
+        {
+            return;
+        }
         for (int i = 0; i < InstantiatedBots.Count; i++)
         {
             CharacterType obj1Type = obj.GetComponent<CharacterManager>().CharacterType;
@@ -480,7 +473,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     private void AutoIncreaseCurrentPotionAmount()
     {
         currentPotionAmount = Mathf.Clamp(currentPotionAmount, 0, 10);
-        currentPotionAmount += Time.deltaTime *0.5F;
+        currentPotionAmount += Time.deltaTime *0.4F;
     }
     #endregion
     
