@@ -26,6 +26,8 @@ public class BattleScenePropertiesController : MonoBehaviour
     [SerializeField] private GameObject[] battleOverWinPanelStars;
     [SerializeField] private GameObject[] battleOverLosePanelStars;
 
+    [SerializeField] private GameObject LoadSceneCanva;
+
     private float time;
 
     private void Start()
@@ -193,12 +195,13 @@ public class BattleScenePropertiesController : MonoBehaviour
         playerDataManager.player.PlayerData.PlayerScor -= randomIndex;
         playerDataManager.player.PlayerData.BattleHistory.Add("-" + randomIndex.ToString());
         playerDataManager.Save();
-        SceneManager.LoadScene(1);
+        LoadScene(1);
     }
 
     public void LoadScene(int sceneIndex)
     {
-        SceneManager.LoadScene(sceneIndex);
+        LoadSceneCanva.SetActive(true);
+        LoadSceneCanva.GetComponent<LoadSceneController>().LoadScene(sceneIndex);
     }
 
     private IEnumerator SetActiveObject(float time, GameObject obj)

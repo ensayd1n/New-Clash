@@ -14,6 +14,7 @@ public class RegisterSceneController : MonoBehaviour
     private string currentSelectedPlayerName;
     [SerializeField] private TextMeshProUGUI viewNameText;
     private bool selectedImage=false;
+    [SerializeField] private GameObject LoadSceneCanva;
     
     public void SetPlayerAvatar(GameObject avatar)
     {
@@ -35,7 +36,8 @@ public class RegisterSceneController : MonoBehaviour
             playerDataManager.player.PlayerData.PlayerName = currentSelectedPlayerName;
             playerDataManager.player.PlayerData.PlayerAvatarImage = currentSelectedSprite;
             playerDataManager.Save();
-            SceneManager.LoadScene(1);
+            LoadSceneCanva.SetActive(true);
+            LoadSceneCanva.GetComponent<LoadSceneController>().LoadScene(1);
         }
     }
     

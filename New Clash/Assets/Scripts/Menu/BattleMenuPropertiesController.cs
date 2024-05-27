@@ -13,6 +13,8 @@ public class BattleMenuPropertiesController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] battleHistoryTexts;
     [SerializeField] private Image[] battleHistorTextBackGround;
 
+    [SerializeField] private GameObject LoadSceneCanva;
+
     
     private void Awake()
     {
@@ -42,7 +44,9 @@ public class BattleMenuPropertiesController : MonoBehaviour
 
         if (index == playerDataManager.player.PlayerData.MainCharacterArray.Length)
         {
-            SceneManager.LoadScene(playerDataManager.player.PlayerData.ArenaLevel+1);
+            gameObject.SetActive(false);
+            LoadSceneCanva.SetActive(true);
+            LoadSceneCanva.GetComponent<LoadSceneController>().LoadScene(playerDataManager.player.PlayerData.ArenaLevel+1);LoadSceneCanva.SetActive(true);
         }
         else
         {
