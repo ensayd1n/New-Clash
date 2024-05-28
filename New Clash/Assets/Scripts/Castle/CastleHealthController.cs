@@ -102,6 +102,14 @@ public class CastleHealthController : MonoBehaviour
         {
             PlayerPrefs.SetInt("BotStars",PlayerPrefs.GetInt("BotStars")+1);
         }
+        transform.parent.gameObject.transform.DOMoveY(-10, 1);
+        StartCoroutine(SetActiveByTimer2(1));
+    }
+
+    private IEnumerator SetActiveByTimer2(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
         transform.parent.gameObject.SetActive(false);
     }
+    
 }
