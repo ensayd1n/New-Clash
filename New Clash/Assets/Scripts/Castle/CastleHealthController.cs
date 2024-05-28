@@ -75,6 +75,7 @@ public class CastleHealthController : MonoBehaviour
             _destroyedAudioSource.Play();
             gameObject.transform.DOMoveY(gameObject.transform.position.y - 50, 0.01F);
             gameObject.transform.parent.transform.GetChild(1).transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+            gameObject.transform.parent.transform.GetChild(1).transform.GetChild(1).GetComponent<ParticleSystem>().Play();
             StartCoroutine(SetActiveBytTimer(2));
         }
     }
