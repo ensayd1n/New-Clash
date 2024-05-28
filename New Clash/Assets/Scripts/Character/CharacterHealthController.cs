@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -88,6 +90,13 @@ public class CharacterHealthController : MonoBehaviour
 
     public void Die()
     {
+        gameObject.transform.parent.gameObject.transform.DOMoveY(-100, 1);
+        StartCoroutine(SetActiveByTimer(1));
+    }
+
+    private IEnumerator SetActiveByTimer(float time)
+    {
+        yield return new WaitForSecondsRealtime(time);
         transform.parent.gameObject.SetActive(false);
     }
 }

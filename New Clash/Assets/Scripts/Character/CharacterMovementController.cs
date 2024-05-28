@@ -13,7 +13,7 @@ public class CharacterMovementController : MonoBehaviour
     private float _targetDistance;
     [HideInInspector] public GameObject ClosestTarget=null;
     [HideInInspector] public GameObject[] Targets = new GameObject[1];
-    public string _targetCharacterTag,_targetCastleTag;
+    [HideInInspector] public string _targetCharacterTag,_targetCastleTag;
 
     [SerializeField] private bool Character, Castle;
     
