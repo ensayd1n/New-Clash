@@ -19,7 +19,8 @@ MonoBehaviour:
   DamageDuration: 0
   Cost: 0
   MoveSpeed: 0
-  TargetDisctance: 13
+  TargetDisctance: 15
   CharacterImage: {fileID: 0}
   ThisGameObject: {fileID: 0}
   ThisHologramParentGameObject: {fileID: 0}
+  CounterTo: []

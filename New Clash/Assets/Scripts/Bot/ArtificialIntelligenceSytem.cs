@@ -101,7 +101,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             spawnOnLeft = true;
         }
 
-        // Select target characters based on the chosen side
+        // düşmanın hangi tarafta olduğunu analiz ediyor daha sonra yakı uzaklığını rastgele değer ile seçiyor
         if (spawnOnLeft)
         {
             targetCharacters = alertLeftSideClosest ? leftSideClosestCharacters : leftSideFarCharacters;
@@ -114,21 +114,20 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
         GameObject characterToSpawn;
         Vector3 spawnPoint;
 
-        if (targetCharacters.Count == 0) // No immediate threat
+        if (targetCharacters.Count == 0) // düşman yok ise
         {
-            // No threat, spawn a random suitable character
+            // Tehdit olmadığı zaman rastgele karakter oluşturuyor
             characterToSpawn = ChooseCharacterBasedOnPotion(currentPotionAmount);
-            // Choose the appropriate spawn point based on the chosen side
+            // seçilen tarafa göre instantiate noktası  seçiyor
             spawnPoint = spawnOnLeft ? GetRandomSpawnPointInLeftHalf() : GetRandomSpawnPointInRightHalf();
         }
-        else // Threat detected
+        else // var ise
         {
-            // Counter the threat
             characterToSpawn = ChooseCounterCharacter(targetCharacters, currentPotionAmount);
             spawnPoint = GetNearestSpawnPointToThreat(targetCharacters);
         }
 
-        // Check if enough potion before spawning
+        // instantiate etmeden önce iksir miktarını kontrol ediyor
         if (characterToSpawn != null && characterToSpawn.GetComponent<CharacterManager>() != null &&
             characterToSpawn.GetComponent<CharacterManager>().CharacterType != null &&
             characterToSpawn.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotionAmount)
@@ -136,14 +135,16 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             BotInstantiateControl(characterToSpawn, spawnPoint);
         }
     }
-
+    
+    //sağ taraf oluşturmasının konumunu seçiyor
     private Vector3 GetRandomSpawnPointInRightHalf()
     {
-        int randomX = Random.Range(0, maxXValue + 1); // Right half of the board
+        int randomX = Random.Range(0, maxXValue);
         int randomZ = Random.Range(minZValue, maxZValue);
         return new Vector3(randomX, 0, randomZ);
     }
-
+    
+    //mevcut iksire göre karakter seçimi yapıyor
     private GameObject ChooseCharacterBasedOnPotion(float currentPotion)
     {
         List<GameObject> affordableCharacters = battleArray
@@ -156,18 +157,13 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
             int randomIndex = Random.Range(0, affordableCharacters.Count);
             return affordableCharacters[randomIndex];
         }
-        else
-        {
-            // Uygun karakter yoksa en düşük maliyetli karakteri seç
-            return battleArray.OrderBy(charObj => 
-                charObj.GetComponent<CharacterManager>().CharacterType.Cost
-            ).First();
-        }
+
+        return null;
     }
     private Vector3 GetRandomSpawnPointInLeftHalf()
     {
-        int randomX = Random.Range(minXValue, 0); // Sol yarının X koordinatları (negatif değerler)
-        int randomZ = Random.Range(minZValue, maxZValue + 1); // Z koordinatları aynı kalır
+        int randomX = Random.Range(minXValue, 0);
+        int randomZ = Random.Range(minZValue, maxZValue + 1);
         return new Vector3(randomX, 0, randomZ);
     }
 
@@ -176,7 +172,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
     {
         GameObject closestThreat = threats.OrderBy(t => Vector3.Distance(t.transform.position, transform.position)).First();
         
-        // Tehdide yakın bir nokta belirleyin (örneğin, tehdidin biraz arkasında)
+        // Tehdide yakın bir nokta belirle
         Vector3 spawnOffset = (closestThreat.transform.position - transform.position).normalized * 2f; 
         return closestThreat.transform.position + spawnOffset;
     }
@@ -191,7 +187,7 @@ public class ArtificialIntelligenceSytem : MonoBehaviour
         {
             CharacterType enemyType = enemy.GetComponent<CharacterManager>().CharacterType;
 
-            // Düşman karaktere karşı koyabilecek uygun karakterleri filtrele
+            // Düşman karaktere karşı koyabilecek uygun karakterleri listeye ekler
             List<GameObject> potentialCounters = battleArray.Where(charObj =>
                     charObj.GetComponent<CharacterManager>().CharacterType.Cost <= currentPotion &&
                     charObj.GetComponent<CharacterManager>().CharacterType.CounterTo.Contains(enemyType) // CounterTo kullanımı
