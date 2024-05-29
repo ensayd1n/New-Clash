@@ -23,6 +23,7 @@ public class CharacterInteractionController : MonoBehaviour
     
     private void FixedUpdate()
     {
+        InteractionToTargetLockCheck();
         ProximityLimitation();
 
     }
@@ -67,6 +68,17 @@ public class CharacterInteractionController : MonoBehaviour
             }
         }
         
+    }
+    
+    private void InteractionToTargetLockCheck()
+    {
+        // Hedef karakter veya kale Collider'ında değilse, kilidi kaldır
+        if (!_characterMovementController.ClosestTarget ||
+            (!_characterMovementController.ClosestTarget.CompareTag(_characterManager.TargetCharacterTag) && 
+             !_characterMovementController.ClosestTarget.CompareTag(_characterManager.TargetCastleTag)))
+        {
+            _interactionToTargetLock = true;
+        }
     }
     
 
