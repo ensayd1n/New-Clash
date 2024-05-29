@@ -23,6 +23,8 @@ public class BattleScenePropertiesController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI battleOverLosePanelPlayerNameText;
     [SerializeField] private TextMeshProUGUI battleOverWinPanelIncreasePlayerScoreText;
     [SerializeField] private TextMeshProUGUI battleOverLosePanelReducePlayerScoreText;
+    [SerializeField] private Image battleWinPanelPlayerImage;
+    [SerializeField] private Image battleLosePanelPlayerImage;
     [SerializeField] private GameObject[] battleOverWinPanelStars;
     [SerializeField] private GameObject[] battleOverLosePanelStars;
 
@@ -140,6 +142,7 @@ public class BattleScenePropertiesController : MonoBehaviour
     private void SetBattleEndingWinPanelProperties(int IncreasePlayerScore)
     {
         int randomMoneyAmount = Random.Range(100, 300);
+        battleWinPanelPlayerImage.sprite = playerDataManager.player.PlayerData.PlayerAvatarImage;
         battleOverWinPanelPlayerNameText.text = playerDataManager.player.PlayerData.PlayerName;
         battleOverWinPanelIncreasePlayerScoreText.text = IncreasePlayerScore.ToString();
         playerDataManager.player.PlayerData.PlayerScor += IncreasePlayerScore;
@@ -157,6 +160,7 @@ public class BattleScenePropertiesController : MonoBehaviour
 
     private void SetBattleEndingLosePanelProperties(int reducePlayerScore)
     {
+        battleLosePanelPlayerImage.sprite = playerDataManager.player.PlayerData.PlayerAvatarImage;
         battleOverLosePanelPlayerNameText.text = playerDataManager.player.PlayerData.PlayerName;
         battleOverLosePanelReducePlayerScoreText.text = reducePlayerScore.ToString();
         playerDataManager.player.PlayerData.PlayerScor += reducePlayerScore;
