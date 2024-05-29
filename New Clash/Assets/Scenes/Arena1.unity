@@ -5452,6 +5452,8 @@ MonoBehaviour:
   battleOverLosePanelPlayerNameText: {fileID: 2067088502}
   battleOverWinPanelIncreasePlayerScoreText: {fileID: 459457313}
   battleOverLosePanelReducePlayerScoreText: {fileID: 238395085}
+  battleWinPanelPlayerImage: {fileID: 1225115671}
+  battleLosePanelPlayerImage: {fileID: 1801780073}
   battleOverWinPanelStars:
   - {fileID: 402017974}
   - {fileID: 724839703}
