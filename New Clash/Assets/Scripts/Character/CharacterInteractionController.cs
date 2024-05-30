@@ -9,6 +9,7 @@ public class CharacterInteractionController : MonoBehaviour
     private CharacterHealthController _characterHealthController;
     
     private bool _interactionToTargetLock = true;
+    private GameObject targetObject=null;
     
 
     private void Awake()
@@ -79,6 +80,12 @@ public class CharacterInteractionController : MonoBehaviour
         {
             _interactionToTargetLock = true;
         }
+
+        if (gameObject.transform.parent.GetComponent<CharacterMovementController>().ClosestTarget != targetObject)
+        {
+            _interactionToTargetLock = true;
+            gameObject.transform.parent.GetComponent<CharacterAnimationController>().SetAttackAnimation(false);
+        }
     }
     
 
@@ -89,6 +96,7 @@ public class CharacterInteractionController : MonoBehaviour
             if (other.gameObject==_characterMovementController.ClosestTarget )
             {
                 _interactionToTargetLock = false;
+                targetObject = other.gameObject;
             }
         }
     }
