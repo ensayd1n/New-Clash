@@ -149,7 +149,7 @@ public class BattleScenePropertiesController : MonoBehaviour
         playerDataManager.player.PlayerData.BattleHistory.Add("+" + IncreasePlayerScore.ToString());
         playerDataManager.player.PlayerData.Money += randomMoneyAmount;
         playerDataManager.Save();
-        UnityEngine.Time.timeScale = 0;
+        //UnityEngine.Time.timeScale = 0;
         int battleStarCount = PlayerPrefs.GetInt("BattleStars");
 
         for (int i = 0; i < battleStarCount; i++)
@@ -166,7 +166,7 @@ public class BattleScenePropertiesController : MonoBehaviour
         playerDataManager.player.PlayerData.PlayerScor += reducePlayerScore;
         playerDataManager.player.PlayerData.BattleHistory.Add("-" + reducePlayerScore.ToString());
         playerDataManager.Save();
-        UnityEngine.Time.timeScale = 0;
+        //UnityEngine.Time.timeScale = 0;
         int battleStarCount = PlayerPrefs.GetInt("BotStars");
 
         for (int i = 0; i < battleStarCount; i++)
