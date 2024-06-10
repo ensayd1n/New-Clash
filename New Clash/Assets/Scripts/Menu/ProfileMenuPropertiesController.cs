@@ -24,6 +24,7 @@ public class ProfileMenuPropertiesController : MonoBehaviour
     private void Start()
     {
         SetPlayerInformations();
+        SetAudio(10);
     }
     private void SetPlayerInformations()
     {
